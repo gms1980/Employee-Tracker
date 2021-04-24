@@ -73,7 +73,7 @@ app.delete("/api/Employee/:id", (req, res) => {
   });
 });
 
-// Create a candidate
+// Create a candidate (getting error message)
 app.post("/api/candidate", ({ body }, res) => {
   const errors = inputCheck(
     body,
@@ -85,7 +85,6 @@ app.post("/api/candidate", ({ body }, res) => {
   if (errors) {
     res.status(400).json({ error: errors });
   }
-});
 const sql = `INSERT INTO Employee (id, first_name, last_name, role_id, manager_id)
                VALUES (?,?,?,?,?)`;
 const params = [id, first_name, last_name, role_id, manager_id];
@@ -99,7 +98,7 @@ db.query(sql, params, (err, result) => {
     data: body
   });
 });
-
+});
 //Default response for any other request (NOT Found) this should be last placement or it will ove ride all others
 app.use((req, res) => {
   res.status(404).end();
