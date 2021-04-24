@@ -20,7 +20,11 @@ const db = mysql.createConnection(
 );
 // Get all the Employee
 app.get("/api/Employee", (req, res) => {
-  const sql = `SELECT * FROM Employee`;
+  const sql = `SELECT Employee.*, department.name
+  AS department_name
+  FROM Employee
+  LEFT JOIN department
+  ON Employee.department_id = department.id`;
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -36,7 +40,12 @@ app.get("/api/Employee", (req, res) => {
 
 // GET a single Employee
 app.get("/api/Employee/:id", (req, res) => {
-  const sql = `SELECT * FROM Employee WHERE id = ?`;
+  const sql = `SELECT Employee.*, department.name 
+  AS department_name 
+  FROM Employee 
+  LEFT JOIN department 
+  ON Employee.department_id = department.id 
+  WHERE Employee.id = ?`;
   const params = [req.params.id];
 
   db.query(sql, params, (err, row) => {
@@ -74,7 +83,7 @@ app.delete("/api/Employee/:id", (req, res) => {
 });
 
 // Create a candidate (getting error message)
-app.post("/api/candidate", ({ body }, res) => {
+app.post("/api/Employee", ({ body }, res) => {
   const errors = inputCheck(
     body,
     "first_name",
@@ -85,20 +94,21 @@ app.post("/api/candidate", ({ body }, res) => {
   if (errors) {
     res.status(400).json({ error: errors });
   }
-const sql = `INSERT INTO Employee (id, first_name, last_name, role_id, manager_id)
+  const sql = `INSERT INTO Employee (id, first_name, last_name, role_id, manager_id)
                VALUES (?,?,?,?,?)`;
-const params = [id, first_name, last_name, role_id, manager_id];
-db.query(sql, params, (err, result) => {
-  if (err) {
-    res.status(400).json({ error: err.message });
-    return;
-  }
-  res.json({
-    message: "success",
-    data: body
+  const params = [id, first_name, last_name, role_id, manager_id];
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "success",
+      data: body,
+    });
   });
 });
-});
+
 //Default response for any other request (NOT Found) this should be last placement or it will ove ride all others
 app.use((req, res) => {
   res.status(404).end();
