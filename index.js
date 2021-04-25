@@ -3,30 +3,28 @@ const express = require("express");
 const router = express.Router();
 const consoleTable = require("console.table");
 //const db = require("db/connection");
-
+const PORT = process.env.PORT || 3006;
+const app = express();
 //const mysql = require('mysql');
 
 // //const connection = mysql.createConnection({
 //     host: 'localhost',
 
-//     // Your port; if not 3306
-//     port: 3306,
 
-//     // Your username
-//     user: 'root',
+    app.use(express.urlencoded({ extended: false }));
+    app.use(express.json());
 
-//     // Your password
-//     password: '',
-//     database: 'schema.sql'
-// });
+    const connection = mysql.createConnection(
+        {
+          host: "localhost",
+          port: "3306",
+          user: "root",
+          password: "shimshim",
+          database: "employee_tracker",
+        },
+        console.log("Connected to the employee_tracker database")
+      );
 
-// connection.connect(err => {
-//     if (err) throw err;
-//     prompt();
-// });
-
-//function init() {
-//inquirer.prompt({
 const questions = [
     {
     type: "list",
@@ -89,7 +87,7 @@ function viewEmployee() {
 //   console.log("View Employee");
 //   function viewEmployees() {
     var query = "SELECT * FROM employees";
-    db.query(query, function(err, res) {
+    connection.query(query, function(err, res) {
     if (err) throw err;
     console.log(res.length + " employees found!");
     console.table('All Employees:', res); 
