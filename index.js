@@ -1,7 +1,7 @@
 
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
-const consoleTable = require("console.table");
+require("console.table");
 const util = require("util")
 const PORT = process.env.PORT || 3006;
 
@@ -40,7 +40,7 @@ const questions = [
 function init() {
   inquirer.prompt(questions).then((answers) => {
     if (answers.selection === "View All Employees") {
-        return viewAllEmployee();
+        return viewAllEmployees();
       }
     if (answers.selection === "View employee") {
       return viewEmployee();
@@ -77,21 +77,21 @@ function init() {
   });
 }
 //View Employee Function
-// function viewEmployee() {
+// function viewAllEmployees() {
 // //   console.log("View Employee");
 // //   function viewEmployees() {
 //     var query = 'SELECT * FROM Employee';
 //     connection.query(query, function(err, res) {
 //     if (err) throw err;
 //     //console.log(res.length + " employees found!");
-//     console.table('All Employees:', res); 
+//     console.table(res); 
 //     init();
 //     })
 // }
 //}
 function viewAllEmployees() {
-    const query = `SELECT employeeid, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
-    FROM employee
+    var query = `SELECT employee.id, employee.first_name, employee.last_name, role.id, department.id AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+    FROM Employee
     LEFT JOIN employee manager on manager.id = employee.manager_id
     INNER JOIN role ON (role.id = employee.role_id)
     INNER JOIN department ON (department.id = role.department_id)
@@ -102,7 +102,7 @@ function viewAllEmployees() {
         console.log('VIEW ALL EMPLOYEES');
         console.log('\n');
         console.table(res);
-        prompt();
+        init();
     });
 }
 function createEmployee() {
@@ -132,32 +132,32 @@ function deleteRole() {
   console.log("Delete Role");
 }
 
-// function viewEmployee() {
-//     inquirer
-//       .prompt({
-//         name: "viewEmployee",
-//         type: "input",
-//         message: "What employee would you like to search for (by last name)?"
-//       })
-//       .then(function (answer) {
-//         var query = "SELECT first_name, last_name, id FROM Employee WHERE ?";
-//         connection.query(query, { last_name: answer.viewEmployee }, function (err, res) {
-//           for (var i = 0; i < res.length; i++) {
-//             console.log("First Name: " + res[i].first_name + " || Last name: " + res[i].last_name + " || Id: " + res[i].id);
-//           }
-//           runSearch();
-//         });
-//       });
-//   }
-//   function viewEmployees() {
-//     var query = `SELECT * FROM Employee`;
-//     connection.query(query, function(err, res) {
-//     if (err) throw err;
-//     //console.log(res.length + " employees found!");
-//     console.table('All Employees:', res); 
-//     init();
-//     })
-// }
+function viewEmployee() {
+    inquirer
+      .prompt({
+        name: "viewEmployee",
+        type: "input",
+        message: "What employee would you like to search for (by last name)?"
+      })
+      .then(function (answer) {
+        var query = "SELECT first_name, last_name, id FROM Employee WHERE ?";
+        connection.query(query, { last_name: answer.viewEmployee }, function (err, res) {
+          for (var i = 0; i < res.length; i++) {
+            console.log("First Name: " + res[i].first_name + " || Last name: " + res[i].last_name + " || Id: " + res[i].id);
+          }
+          runSearch();
+        });
+      });
+  }
+  function viewEmployees() {
+    var query = `SELECT * FROM Employee`;
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+    //console.log(res.length + " employees found!");
+    console.table('All Employees:', res); 
+    init();
+    })
+}
 
 function viewDepartments() {
     var query = "SELECT * FROM department";
@@ -167,7 +167,6 @@ function viewDepartments() {
     init();
 })
 }
-
 function viewRoles() {
     var query = "SELECT * FROM role";
     connection.query(query, function(err, res){
