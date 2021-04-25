@@ -1,19 +1,20 @@
 
-const mysql = require("mysql2");const inquirer = require("inquirer");
-const express = require("express");
-const router = express.Router();
+const mysql = require("mysql2");
+const inquirer = require("inquirer");
+//const express = require("express");
+//const router = express.Router();
 const consoleTable = require("console.table");
 //const db = require("db/connection");
 const PORT = process.env.PORT || 3006;
-const app = express();
+//const app = express();
 //const mysql = require('mysql');
 
 // //const connection = mysql.createConnection({
 //     host: 'localhost',
 
-
-    app.use(express.urlencoded({ extended: false }));
-    app.use(express.json());
+//Express middleware
+    //app.use(express.urlencoded({ extended: false }));
+    //app.use(express.json());
 
     const connection = mysql.createConnection(
         {
@@ -87,7 +88,7 @@ function init() {
 function viewEmployee() {
 //   console.log("View Employee");
 //   function viewEmployees() {
-    var query = "SELECT * FROM employees";
+    var query = "SELECT * FROM Employee";
     connection.query(query, function(err, res) {
     if (err) throw err;
     console.log(res.length + " employees found!");
