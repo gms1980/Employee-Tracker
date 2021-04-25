@@ -1,4 +1,5 @@
-const inquirer = require("inquirer");
+
+const mysql = require("mysql2");const inquirer = require("inquirer");
 const express = require("express");
 const router = express.Router();
 const consoleTable = require("console.table");
