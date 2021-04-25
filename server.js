@@ -1,6 +1,6 @@
 const mysql = require("mysql2");
 const express = require("express");
-const inputCheck = require("./utils/inputCheck");
+//const inputCheck = require("./utils/inputCheck");
 
 const PORT = process.env.PORT || 3004;
 const app = express();
@@ -13,7 +13,7 @@ const db = mysql.createConnection(
   {
     host: "localhost",
     user: "root",
-    password: "s",
+    password: "shimshim",
     database: "employee_tracker",
   },
   console.log("Connected to the employee_tracker database")
