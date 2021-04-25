@@ -3,6 +3,7 @@ CREATE DATABASE employee_tracker;
 USE employee_tracker;
 DROP TABLE IF EXISTS Employee;
 DROP TABLE IF EXISTS department;
+DROP TABLE IF EXISTS role_;
 
 CREATE TABLE department (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -10,6 +11,13 @@ CREATE TABLE department (
   description TEXT
 );
 
+CREATE TABLE role (
+id INTEGER NOT NULL AUTO_INCREMENT,
+title VARCHAR (30) NULL,
+salary DECIMAL (10,2) NULL,
+department_id INT (10) NULL,
+PRIMARY KEY (id)
+);
 
 CREATE TABLE Employee (
     id INT AUTO_INCREMENT NOT NULL,

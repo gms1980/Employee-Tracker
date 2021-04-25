@@ -17,6 +17,7 @@ const questions = [
       "View role",
       "Create role",
       "Delete role",
+      "Exit"
     ],
   },
 ];
@@ -27,28 +28,31 @@ function init() {
       return viewEmployee();
     }
     if (answers.selection === "Create employee") {
-      return viewEmployee();
+      return createEmployee();
     }
     if (answers.selection === "Delete employee") {
-      return viewEmployee();
+      return deleteEmployee();
     }
     if (answers.selection === "View department") {
-      return viewEmployee();
+      return viewDepartment();
     }
     if (answers.selection === "Create department") {
-      return viewEmployee();
+      return createDepartment();
     }
     if (answers.selection === "Delete department") {
-      return viewEmployee();
+      return deleteDepartment();
     }
     if (answers.selection === "View role") {
-      return viewEmployee();
+      return viewRole();
     }
     if (answers.selection === "Create role") {
-      return viewEmployee();
+      return createRole();
     }
     if (answers.selection === "Delete role") {
-      return viewEmployee();
+      return deleteRole();
+    }
+    if (answer.selection === "Exit") {
+        connection.end();
     }
     //console.log(answers)
   });
@@ -83,4 +87,22 @@ function createRole() {
 function deleteRole() {
   console.log("Delete Role");
 }
+
+function viewEmployee() {
+    inquirer
+      .prompt({
+        name: "viewEmployee",
+        type: "input",
+        message: "What employee would you like to search for (by last name)?"
+      })
+      .then(function (answer) {
+        var query = "SELECT first_name, last_name, id FROM Employee WHERE ?";
+        connection.query(query, { last_name: answer.viewEmployee }, function (err, res) {
+          for (var i = 0; i < res.length; i++) {
+            console.log("First Name: " + res[i].first_name + " || Last name: " + res[i].last_name + " || Id: " + res[i].id);
+          }
+          runSearch();
+        });
+      });
+  }
 init();
